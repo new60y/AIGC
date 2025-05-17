@@ -83,6 +83,40 @@ def infer(model,timesteps,schedule,sample_num):
             plt.imshow(x.squeeze().cpu(),cmap="gray")
             plt.show()
 
+def ddim_infer(model,timesteps,schedule,sample_num,ddim_steps=10):
+    betas,alphas,hat_alphas=schedule(timesteps)
+
+    model.eval()
+
+    #ts=torch.tensor(range(timesteps,0,-1))
+
+    ts=torch.linspace(1,timesteps,ddim_steps).to(torch.long)
+
+    print(ts)
+
+    with torch.no_grad():
+        for i in range(sample_num):
+            x=torch.randn((1,1,32,32))
+            for t in range(ddim_steps-1,0,-1):
+                #x=ddim_p_sample(model,x,t,betas,alphas,hat_alphas)
+                t2=ts[t]
+                t1=ts[t-1]
+                #print(t,t-1,t2,t1)
+                z=torch.randn_like(x)
+                hat_alpha2=hat_alphas[t2-1]
+                hat_alpha1=hat_alphas[t1-1]
+                #alpha=alphas[t-1]
+                beta=betas[t2-1]
+                #var=torch.sqrt(beta)
+                var=0
+                pred_noise=model(x,t2.unsqueeze(dim=0)).to("cpu")
+                #x=1/torch.sqrt(alpha)*(x-(1-alpha)/torch.sqrt(1-hat_alpha)*pred_noise)
+                x=torch.sqrt(hat_alpha1)/torch.sqrt(hat_alpha2)*(x-torch.sqrt(1-hat_alpha2)*pred_noise)+torch.sqrt(1-hat_alpha1-var**2)*pred_noise+var*z
+
+            #print(x)
+            plt.imshow(x.squeeze().cpu(),cmap="gray")
+            plt.show()
+
 if __name__=="__main__":
     '''
     transform = torchvision.transforms.Compose(

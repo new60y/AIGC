@@ -41,6 +41,8 @@ if __name__=="__main__":
 
     if args.ag=="ddpm":
         infer=ddpm.infer
+    elif args.ag=="ddim":
+        infer=ddpm.ddim_infer
     if args.net=="unet":
         model=Unet(1).to(device)
     if args.ckpt:
