@@ -16,10 +16,10 @@ import math
 import argparse
 
 import ddpm
-from unet import Unet
+#from unet import Unet
 from scheduler import linear_beta_schedule
 from utils import set_device,set_seed,save_checkpoint,load_checkpoint
-from load_data import load_data
+#from load_data import load_data
 
 device=set_device()
 

@@ -108,6 +108,7 @@ class Unet(nn.Module):
 
     def forward(self,x,t):
         x=x.to(device)
+        #t=torch.tensor(t).reshape(x.shape[0],-1).to(device)
         #x=torch.tensor(x,dtype=torch.float32)
         t_embed=self.time_embedding(t)
         #print(x.shape,t_embed.shape)

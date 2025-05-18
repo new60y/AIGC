@@ -17,10 +17,10 @@ import json
 import random
 import math
 
-from unet import Unet
+#from unet import Unet
 from scheduler import linear_beta_schedule
 from utils import set_device,set_seed,save_checkpoint,load_checkpoint
-from load_data import load_data
+#from load_data import load_data
 
 device=set_device()
 
@@ -118,6 +118,7 @@ def ddim_infer(model,timesteps,schedule,sample_num,ddim_steps=10):
             plt.show()
 
 if __name__=="__main__":
+    pass
     '''
     transform = torchvision.transforms.Compose(
     [
@@ -127,7 +128,7 @@ if __name__=="__main__":
     ]
     )
     train_set=torchvision.datasets.MNIST(root="../data/", download=True, transform=transform)
-    '''
+    
     train_set=load_data("MNIST")
     batch_size=128
     train_loader=DataLoader(train_set,batch_size,True)
@@ -149,5 +150,5 @@ if __name__=="__main__":
     train(train_loader,model,optimizer,criterion,epochs,timesteps,model_path)
 
     infer(model)
-
+    '''
     
