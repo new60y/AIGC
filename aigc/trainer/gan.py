@@ -47,7 +47,6 @@ def train(train_loader, batch_size, epochs, lr, config, model_path=None):
             real_labels = torch.ones(batch_size, 1, device=device)
             fake_labels = torch.zeros(batch_size, 1, device=device)
 
-            # 训练判别器
             z = torch.randn(batch_size, noise_dim, device=device)
             fake_imgs = G(z)
             D_real = D(real_imgs)
@@ -57,7 +56,6 @@ def train(train_loader, batch_size, epochs, lr, config, model_path=None):
             loss_D.backward()
             optimizer_D.step()
 
-            # 训练生成器
             z = torch.randn(batch_size, noise_dim, device=device)
             fake_imgs = G(z)
             D_fake = D(fake_imgs)
@@ -71,12 +69,10 @@ def train(train_loader, batch_size, epochs, lr, config, model_path=None):
 
         print(loss_sum / batch_count)
 
-        # 每个epoch结束后只保存生成器
         if model_path:
             save_checkpoint(G, model_path + "_G.pth")
             save_checkpoint(D, model_path + "_D.pth")
 
-    # 训练结束后采样并输出图片
     G.eval()
     with torch.no_grad():
         z = torch.randn(sample_num, noise_dim, device=device)
